@@ -1,0 +1,100 @@
+Lucas Rivera
+Lab 1 Report
+Computer Architecture
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Assignment 1:
+Instruction	OP(6)	RS(5)	RT(5)	RD(5)	Shamt(5)	Func(6)
+Sub $8,$8,$12	000000	01000	01100	01000	00000	100010
+
+Intruction 	Op(6)	Rs(5)	Rt(5)	Constant(16)
+addi $10,$0,8	001000	00000	01010	0000000000001000
+Li $2,10 	001101	00000	00010	0000000000001010
+
+
+Assignment 2:
+Program + Comments::
+#LAB1Ex1
+.data 0x10000000
+.text 0x00400000
+.globl main
+
+main:
+	addi $10,$0,8 	#adds the intermediate value of 8 and the register (R0) and places the result in R10
+	li $11,5	#Loads the intermediate value of 5 into register(R11)
+	add $8,$0,$10	#adds the two register values of (R0,R10 respectively) and stores the value into R8
+	add $9,$0,$0	#multiplies R0 by 2 and stores the value in R9
+	li $12,1	#Load the intermediate value of 1 into register R12
+
+mulloop:
+	beq $8,$0,mulexit	#Branch if to mulexit label if R8 = R0
+	sub $8,$8,$12		#This is the else logic-- Subtract the values of R8 and R12 and store in R8
+	add $9,$9,$11		#Adds the values of R9 and R11 and store the values in R9
+	j mulloop		#jump unconditionally to the label mulloop
+
+mulexit:
+	li $2,10	#Load the intermideate value of 10 into R2
+	syscall		#System call, ends the program
+
+Assignment 3:
+1.	Program Ex2.asm
+.text 0x00400000
+.align 2
+.globl main
+
+main: 				# reveres the array and saves the result(used in Assig. 3)
+	lw $a0, Size		#Load the size of array into $a0, using lw
+	addi $a0, $a0,-1		# initialize index j with size-1
+	li $a1, 0 		#initialize index i
+	li $t2,4			# t2 contains constant 4, initialize t2
+loop:
+	mul $t1, $a1, $t2 	# t1 gets i*4
+	mul $t4,$a1,$t2		# t4 gets j*4
+	lw $a3, Array($t1) 	# a3 = N[i]
+	lw $t5, Array($t4)	# t5 = N[j]
+	sw $t1, Array($t4)	#store N[j] in the array in location i
+	sw $t4, Array($t1)	#store N[i] in the array in location j
+	addi $t1,$t1,1		# i = i + 1
+	addi $t4,$t4,-1		#j=j-1`1
+	bge $a1, $t3,END	# go to ENDif finished
+			
+	j loop
+END:
+	li $v0, 10
+	syscall
+
+.data 0x10000000
+.align 2
+Array: .word 2 5 6 7 12 16 25 27
+Size: .word 8
+2 Now the program as been ran with the f10 key being pressed with each line feed, the registers that I used in my program changed with each line(if necessary), I also noticed that the PC Counter changed by 4 through each line feed
+3.  Data Segment
+[10000000]    0000000002  0000000005  0000000006  0000000007    . . . . . . . . . . . . . . . . 
+[10000010]    0000000012  0000000016  0000000025  0000000027    . . . . . . . . . . . . . . . .
+4. All arrays start at 0 and and end at (size-1), if (size-1) was not used, and size was used as an index instead than an index out of bonds error would occure.
+
+Assignment 4:
