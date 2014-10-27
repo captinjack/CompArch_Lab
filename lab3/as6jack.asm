@@ -1,6 +1,5 @@
-#Jack Mamiye
-#129009534
-#as6jack.asm
+#
+#biggest.asm
 
 #Calculates the largest element of a floating-point array
 
